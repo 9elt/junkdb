@@ -119,15 +119,33 @@ bool Database::has(long int hash) {
 }
 
 void Database::remove(long int hash) {
-    for (int i = 0; i < size; i++) {
-        if (data[i] == hash) {
-            data[i] = -1;
-            for (int j = i; j < size - 1; j++) {
-                data[j] = data[j + 1];
+    for (int pop = 0; pop < HASHES_CAP; pop++) {
+        if (data[pop] == hash) {
+            if (pop == size - 1) {
+                ;
+            } else if (pop < size) {
+                for (int i = pop; i < size - 1; i++) {
+                    data[i] = data[i + 1];
+                }
+            } else {
+                for (int j = pop; j < HASHES_CAP - 1; j++) {
+                    data[j] = data[j + 1];
+                }
+
+                data[HASHES_CAP - 1] = data[0];
+
+                for (int j = 0; j < size - 1; j++) {
+                    data[j] = data[j + 1];
+                }
             }
+
+            pop--;
             size--;
+            data[size] = -1;
         }
     }
+
+    printf("Removed (%ld)\n", hash);
 
     dump();
 }
