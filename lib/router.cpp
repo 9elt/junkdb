@@ -4,7 +4,7 @@ Router::Router(Active *_databases) { databases = _databases; }
 
 char const *Router::handle(Request *request) {
     if (request->action == UNKNOWN) {
-        return UNKNOW_ACTION;
+        return UNKNOWN_ACTION;
     }
 
     Database *db = databases->get(request->database);

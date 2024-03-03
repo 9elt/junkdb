@@ -89,6 +89,7 @@ bool Database::has(long int hash) {
 void Database::remove(long int hash) {
     for (int i = 0; i < size; i++) {
         if (data[i] == hash) {
+            data[i] = -1;
             for (int j = i; j < size - 1; j++) {
                 data[j] = data[j + 1];
             }

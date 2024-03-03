@@ -4,7 +4,7 @@
 #define TRUE "1"
 #define FALSE "0"
 
-#define UNKNOW_ACTION "-1"
+#define UNKNOWN_ACTION "-1"
 #define UNREACHABLE_DATABASE "-2"
 #define SERVER_ERROR "-3"
 

@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "config.hpp"
+#include "router.hpp"
 
 int main(int argc, char **argv) {
     if (argc != 2) {
@@ -41,6 +42,19 @@ int main(int argc, char **argv) {
 
     while (recv(fd, buffer, sizeof(buffer), 0) > 0) {
         printf("%s\n", buffer);
+
+        if (strcmp(buffer, TRUE) == 0) {
+            printf("true\n");
+        } else if (strcmp(buffer, FALSE) == 0) {
+            printf("false\n");
+        } else if (strcmp(buffer, UNKNOWN_ACTION) == 0) {
+            printf("unknown action\n");
+        } else if (strcmp(buffer, UNREACHABLE_DATABASE) == 0) {
+            printf("unreachable database\n");
+        } else if (strcmp(buffer, SERVER_ERROR) == 0) {
+            printf("server error\n");
+        }
+
         bzero(buffer, 3);
     }
 
