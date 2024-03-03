@@ -68,6 +68,8 @@ int main() {
             continue;
         }
 
+        printf("received: %s\n", buffer);
+
         Request request(buffer);
 
         char *response = (char *)router.handle(&request);

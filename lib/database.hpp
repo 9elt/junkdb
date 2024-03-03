@@ -1,8 +1,6 @@
 #include "config.hpp"
 
 class Database {
-    char *path;
-
     long int unique;
 
     int size;
@@ -14,6 +12,8 @@ class Database {
     void empty();
 
     int dump();
+
+    char *path();
 
   public:
     long int id;
@@ -31,6 +31,4 @@ class Database {
     bool has(long int hash);
 
     void remove(long int hash);
-
-    ~Database();
 };

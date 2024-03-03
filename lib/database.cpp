@@ -2,27 +2,43 @@
 #include <stdio.h>
 
 void Database::load() {
-    char *tmp_path = new char[128];
-    sprintf(tmp_path, DATA_DIR "/%ld", id);
+    char *path = this->path();
 
-    FILE *f = fopen(tmp_path, "r");
+    FILE *f = fopen(path, "r");
 
-    if (f == nullptr || fread(this, sizeof(Database), 1, f) != 1) {
-        printf("Creading database %ld at %s\n", id, tmp_path);
+    if (f == nullptr) {
+        printf("Creating database %ld at %s\n", id, path);
 
-        path = tmp_path;
         empty();
 
         if (dump() < 0) {
             delete[] path;
-            path = nullptr;
             id = -1;
         };
 
         return;
     }
 
-    path = tmp_path;
+    if (fread(this, sizeof(Database), 1, f) != 1) {
+        printf("Cannot read database %ld at %s\n", id, path);
+
+        delete[] path;
+        id = -1;
+
+        return;
+    }
+
+    printf("Loaded database %ld at %s, unique %ld, size %d\n", id, path, unique,
+           size);
+
+    delete[] path;
+}
+
+char *Database::path() {
+    char *path = new char[128];
+    sprintf(path, DATA_DIR "/%ld", id);
+
+    return path;
 }
 
 void Database::empty() {
@@ -35,18 +51,34 @@ void Database::empty() {
 }
 
 int Database::dump() {
+    char *path = this->path();
+
+    printf("Dumping database %ld at %s, unique %ld, size %d\n", id, path,
+           unique, size);
+
     FILE *f = fopen(path, "w");
 
     if (f == nullptr) {
         printf("Dump failed, error opening file %s\n", path);
+
+        delete[] path;
+
         return -1;
     }
 
-    for (int i = 0; i < size; i++) {
-        fwrite(this, sizeof(Database), 1, f);
+    if (fwrite(this, sizeof(Database), 1, f) != 1) {
+        printf("Dump failed, error writing to file %s\n", path);
+
+        fclose(f);
+
+        delete[] path;
+
+        return -1;
     }
 
     fclose(f);
+
+    delete[] path;
 
     return 0;
 }
@@ -99,5 +131,3 @@ void Database::remove(long int hash) {
 
     dump();
 }
-
-Database::~Database() { delete[] path; }
