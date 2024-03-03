@@ -29,7 +29,7 @@ void Database::load() {
     }
 
     printf("Loaded database %ld at %s, unique %ld, size %d\n", id, path, unique,
-           size);
+           buffer_end);
 
     delete[] path;
 }
@@ -43,10 +43,10 @@ char *Database::path() {
 
 void Database::empty() {
     unique = 0;
-    size = 0;
+    buffer_end = 0;
 
-    for (int i = 0; i < HASHES_CAP; i++) {
-        data[i] = -1;
+    for (int i = 0; i < BUFFER_CAP; i++) {
+        buffer[i] = -1;
     }
 }
 
@@ -54,7 +54,7 @@ int Database::dump() {
     char *path = this->path();
 
     printf("Dumping database %ld at %s, unique %ld, size %d\n", id, path,
-           unique, size);
+           unique, buffer_end);
 
     FILE *f = fopen(path, "w");
 
@@ -99,18 +99,18 @@ void Database::set(long int _unique) {
 }
 
 void Database::add(long int hash) {
-    if (size == HASHES_CAP) {
-        size = 0;
+    if (buffer_end == BUFFER_CAP) {
+        buffer_end = 0;
     }
 
-    data[size++] = hash;
+    buffer[buffer_end++] = hash;
 
     dump();
 }
 
 bool Database::has(long int hash) {
-    for (int i = 0; i < HASHES_CAP; i++) {
-        if (data[i] == hash) {
+    for (int i = 0; i < BUFFER_CAP; i++) {
+        if (buffer[i] == hash) {
             return true;
         }
     }
@@ -119,29 +119,29 @@ bool Database::has(long int hash) {
 }
 
 void Database::remove(long int hash) {
-    for (int pop = 0; pop < HASHES_CAP; pop++) {
-        if (data[pop] == hash) {
-            if (pop == size - 1) {
+    for (int pop = 0; pop < BUFFER_CAP; pop++) {
+        if (buffer[pop] == hash) {
+            if (pop == buffer_end - 1) {
                 ;
-            } else if (pop < size) {
-                for (int i = pop; i < size - 1; i++) {
-                    data[i] = data[i + 1];
+            } else if (pop < buffer_end) {
+                for (int i = pop; i < buffer_end - 1; i++) {
+                    buffer[i] = buffer[i + 1];
                 }
             } else {
-                for (int j = pop; j < HASHES_CAP - 1; j++) {
-                    data[j] = data[j + 1];
+                for (int j = pop; j < BUFFER_CAP - 1; j++) {
+                    buffer[j] = buffer[j + 1];
                 }
 
-                data[HASHES_CAP - 1] = data[0];
+                buffer[BUFFER_CAP - 1] = buffer[0];
 
-                for (int j = 0; j < size - 1; j++) {
-                    data[j] = data[j + 1];
+                for (int j = 0; j < buffer_end - 1; j++) {
+                    buffer[j] = buffer[j + 1];
                 }
             }
 
             pop--;
-            size--;
-            data[size] = -1;
+            buffer_end--;
+            buffer[buffer_end] = -1;
         }
     }
 

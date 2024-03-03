@@ -3,9 +3,9 @@
 class Database {
     long int unique;
 
-    int size;
+    int buffer_end;
 
-    long int data[HASHES_CAP];
+    long int buffer[BUFFER_CAP];
 
     void load();
 
