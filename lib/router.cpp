@@ -19,7 +19,7 @@ char const *Router::handle(Request *request) {
 
     if (request->action == SET) {
         db->set(request->payload);
-        return TRUE;
+        return OK;
     }
 
     if (request->action == HAS) {
@@ -28,12 +28,12 @@ char const *Router::handle(Request *request) {
 
     if (request->action == ADD) {
         db->add(request->payload);
-        return TRUE;
+        return OK;
     }
 
     if (request->action == REM) {
         db->remove(request->payload);
-        return TRUE;
+        return OK;
     }
 
     return SERVER_ERROR;

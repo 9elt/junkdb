@@ -5,7 +5,8 @@ A simple database to store scripts states
 
 Databases are automatically created when they are first accessed.
 A database is composed of a unique state and a generic data list.
-Data cannot be accessed directly, and can only be checked for equality, added, or removed.
+Data cannot be read directly, but only checked for existence, added,
+or removed.
 
 
 protocol:

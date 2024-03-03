@@ -1,8 +1,9 @@
 #include "active.hpp"
 #include "request.hpp"
 
-#define TRUE "1"
 #define FALSE "0"
+#define TRUE "1"
+#define OK "2"
 
 #define UNKNOWN_ACTION "-1"
 #define UNREACHABLE_DATABASE "-2"

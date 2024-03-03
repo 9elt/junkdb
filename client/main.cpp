@@ -12,12 +12,23 @@
 #include "router.hpp"
 
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        printf("usage: %s <request>\n", argv[0]);
+    if (argc < 2) {
+        printf("usage: %s <request> options\n", argv[0]);
         return 1;
     }
 
     char *request = argv[1];
+
+    bool raw = true;
+
+    if (argc > 2) {
+        for (int i = 2; i < argc; i++) {
+            if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--human") == 0) {
+                raw = false;
+            }
+        }
+    }
+
     char buffer[3]{0};
 
     int fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -41,9 +52,12 @@ int main(int argc, char **argv) {
     send(fd, request, strlen(request), 0);
 
     while (recv(fd, buffer, sizeof(buffer), 0) > 0) {
-        printf("%s\n", buffer);
 
-        if (strcmp(buffer, TRUE) == 0) {
+        if (raw) {
+            printf("%s\n", buffer);
+        } else if (strcmp(buffer, OK) == 0) {
+            printf("ok\n");
+        } else if (strcmp(buffer, TRUE) == 0) {
             printf("true\n");
         } else if (strcmp(buffer, FALSE) == 0) {
             printf("false\n");
@@ -53,6 +67,8 @@ int main(int argc, char **argv) {
             printf("unreachable database\n");
         } else if (strcmp(buffer, SERVER_ERROR) == 0) {
             printf("server error\n");
+        } else {
+            printf("unknown response: %s\n", buffer);
         }
 
         bzero(buffer, 3);
