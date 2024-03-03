@@ -1,11 +1,11 @@
 Junk DB
 
-A simple database to store scripts states
+A trivial database to store scripts states
 
 
 Databases are automatically created when they are first accessed.
-A database is composed of a unique state and a generic data list.
-Data cannot be read directly, but only checked for existence, added,
+A database stores a signle unique state and some generic data.
+Data cannot be read back, but only checked for existence, added,
 or removed.
 
 
@@ -16,12 +16,12 @@ protocol:
 
 actions:
 
-IS,     check if unique state equals payload
+IS,     check if the database unique state equals to the payload
 
-SET,    set unique state to payload
+SET,    set the database unique state to the payload
 
-HAS,    check if database contains payload
+HAS,    check if the database contains the payload
 
-ADD,    add payload to database
+ADD,    add the payload to the database
 
-REM,    remove payload from database
+REM,    remove the payload from the database

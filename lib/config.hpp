@@ -5,5 +5,5 @@
 /// how many databases can be active at once
 #define ACTIVE_DATABASES 4
 
-/// how much data can be stored in the database buffer
+/// how many items can be stored in the database buffer
 #define BUFFER_CAP 1024
