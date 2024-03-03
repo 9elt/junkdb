@@ -1,3 +1,26 @@
 Junk DB
 
 A simple database to store scripts states
+
+
+Databases are automatically created when they are first accessed.
+A database is composed of a unique state and a generic data list.
+Data cannot be accessed directly, and can only be checked for equality, added, or removed.
+
+
+protocol:
+
+<db-name> <ACTION> <payload>
+
+
+actions:
+
+IS,     check if unique state equals payload
+
+SET,    set unique state to payload
+
+HAS,    check if database contains payload
+
+ADD,    add payload to database
+
+REM,    remove payload from database
