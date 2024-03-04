@@ -1,6 +1,6 @@
 #define PORT 40165
 
-#define DATA_DIR "/var/junkdb"
+#define DATA_DIR "HOME/.junkdb/data"
 
 /// how many databases can be active at once
 #define ACTIVE_DATABASES 4
