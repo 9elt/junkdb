@@ -6,4 +6,4 @@
 #define ACTIVE_DATABASES 4
 
 /// how many items can be stored in the database buffer
-#define BUFFER_CAP 1008
+#define BUFFER_CAP 1009
