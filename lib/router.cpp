@@ -20,7 +20,7 @@ char const *Router::handle(Request *request) {
         rstr[0] = 'O';
         rstr[1] = 'K';
         rstr[2] = ' ';
-        sprintf(rstr + 2, "%ld", res);
+        sprintf(rstr + 3, "%ld", res);
         return rstr;
     }
 
