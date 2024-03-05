@@ -7,7 +7,7 @@ void Database::load() {
     FILE *f = fopen(path, "r");
 
     if (f == nullptr) {
-        printf("Creating database %ld at %s\n", id, path);
+        printf("Creating database %lu at %s\n", id, path);
 
         empty();
 
@@ -20,7 +20,7 @@ void Database::load() {
     }
 
     if (fread(this, sizeof(Database), 1, f) != 1) {
-        printf("Cannot read database %ld at %s\n", id, path);
+        printf("Cannot read database %lu at %s\n", id, path);
 
         delete[] path;
         id = DEFAULT_ID;
@@ -28,7 +28,7 @@ void Database::load() {
         return;
     }
 
-    printf("Loaded database %ld at %s, unique %ld, size %d\n", id, path, status,
+    printf("Loaded database %lu at %s, status %lu, size %d\n", id, path, status,
            buffer_end);
 
     delete[] path;
@@ -36,7 +36,7 @@ void Database::load() {
 
 char *Database::path() {
     char *path = new char[128];
-    sprintf(path, DATA_DIR "/%ld", id);
+    sprintf(path, DATA_DIR "/%lu", id);
 
     return path;
 }
@@ -53,7 +53,7 @@ void Database::empty() {
 int Database::dump() {
     char *path = this->path();
 
-    printf("Dumping database %ld at %s, unique %ld, size %d\n", id, path,
+    printf("Dumping database %lu at %s, status %ld, size %d\n", id, path,
            status, buffer_end);
 
     FILE *f = fopen(path, "w");
@@ -86,7 +86,7 @@ int Database::dump() {
 Database::Database() {}
 
 Database::Database(unsigned long _id) {
-    id = id == DEFAULT_ID ? _id + 1 : _id;
+    id = _id == DEFAULT_ID ? _id + 1 : _id;
     load();
 }
 
