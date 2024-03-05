@@ -9,6 +9,7 @@ dir=$(dirname $0)
 
 sed -i -e "s|HOME|$HOME|g" "$dir/lib/config.hpp" || fatal "Failed to set home directory"
 
+make clean || fatal "Failed to clean junkdb"
 make || fatal "Failed to build junkdb"
 
 if [[ -d ~/.junkdb ]]; then
