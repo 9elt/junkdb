@@ -1,4 +1,4 @@
-long int hash(char *str) {
+unsigned long hash(char *str) {
     unsigned long hash = 5381;
     int c;
 

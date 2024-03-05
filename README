@@ -4,7 +4,7 @@ A trivial database to store scripts states
 
 
 Databases are automatically created when they are first accessed.
-A database stores a signle unique state and some generic data.
+A database stores a numeric status and some generic data.
 Data cannot be read back, but only checked for existence, added,
 or removed.
 
@@ -16,9 +16,9 @@ protocol:
 
 actions:
 
-IS,     check if the database unique state equals to the payload
+GET,    get the database status
 
-SET,    set the database unique state to the payload
+SET,    set the database status
 
 HAS,    check if the database contains the payload
 

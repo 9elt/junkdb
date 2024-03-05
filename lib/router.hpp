@@ -1,13 +1,13 @@
 #include "active.hpp"
 #include "request.hpp"
 
-#define FALSE "0"
-#define TRUE "1"
-#define OK "2"
+#define FALSE "false"
+#define TRUE "true"
+#define OK "ok"
 
-#define UNKNOWN_ACTION "-1"
-#define UNREACHABLE_DATABASE "-2"
-#define SERVER_ERROR "-3"
+#define UNKNOWN_ACTION "unknown action"
+#define UNREACHABLE_DATABASE "unreachable database"
+#define SERVER_ERROR "server error"
 
 struct Router {
     Active *databases;

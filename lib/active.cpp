@@ -2,7 +2,7 @@
 
 Active::Active() { size = 0; }
 
-Database *Active::get(long int id) {
+Database *Active::get(unsigned long id) {
     for (int i = 0; i < size; i++) {
         if (databases[i].id == id) {
             return &databases[i];
@@ -11,7 +11,7 @@ Database *Active::get(long int id) {
 
     Database init = Database(id);
 
-    if (init.id == -1) {
+    if (init.id == DEFAULT_ID) {
         return nullptr;
     }
 

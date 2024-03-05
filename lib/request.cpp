@@ -1,5 +1,6 @@
 #include "request.hpp"
 #include <cstdio>
+#include <iostream>
 
 Request::Request(char *str) {
     char database_str[128];
@@ -52,8 +53,8 @@ Request::Request(char *str) {
 
     database = hash(database_str);
 
-    if (action_str[0] == 'I' && action_str[1] == 'S') {
-        action = IS;
+    if (action_str[0] == 'G' && action_str[1] == 'E' && action_str[2] == 'T') {
+        action = GET;
     } else if (action_str[0] == 'S' && action_str[1] == 'E' &&
                action_str[2] == 'T') {
         action = SET;
@@ -71,5 +72,7 @@ Request::Request(char *str) {
         action = UNKNOWN;
     }
 
-    payload = hash(data_str);
+    payload = action == GET   ? 0
+              : action == SET ? atol(data_str)
+                              : hash(data_str);
 }

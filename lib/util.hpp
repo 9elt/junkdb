@@ -1,1 +1,1 @@
-long int hash(char *str);
+unsigned long hash(char *str);

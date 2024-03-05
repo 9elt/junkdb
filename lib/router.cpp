@@ -1,4 +1,5 @@
 #include "router.hpp"
+#include <stdio.h>
 
 Router::Router(Active *_databases) { databases = _databases; }
 
@@ -13,8 +14,11 @@ char const *Router::handle(Request *request) {
         return UNREACHABLE_DATABASE;
     }
 
-    if (request->action == IS) {
-        return db->is(request->payload) ? TRUE : FALSE;
+    if (request->action == GET) {
+        long res = db->get();
+        char *rstr = new char[res / 10 + 2];
+        sprintf(rstr, "%ld", res);
+        return rstr;
     }
 
     if (request->action == SET) {

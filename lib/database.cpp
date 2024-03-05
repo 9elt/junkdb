@@ -13,7 +13,7 @@ void Database::load() {
 
         if (dump() < 0) {
             delete[] path;
-            id = -1;
+            id = DEFAULT_ID;
         };
 
         return;
@@ -23,12 +23,12 @@ void Database::load() {
         printf("Cannot read database %ld at %s\n", id, path);
 
         delete[] path;
-        id = -1;
+        id = DEFAULT_ID;
 
         return;
     }
 
-    printf("Loaded database %ld at %s, unique %ld, size %d\n", id, path, unique,
+    printf("Loaded database %ld at %s, unique %ld, size %d\n", id, path, status,
            buffer_end);
 
     delete[] path;
@@ -42,7 +42,7 @@ char *Database::path() {
 }
 
 void Database::empty() {
-    unique = 0;
+    status = 0;
     buffer_end = 0;
 
     for (int i = 0; i < BUFFER_CAP; i++) {
@@ -54,7 +54,7 @@ int Database::dump() {
     char *path = this->path();
 
     printf("Dumping database %ld at %s, unique %ld, size %d\n", id, path,
-           unique, buffer_end);
+           status, buffer_end);
 
     FILE *f = fopen(path, "w");
 
@@ -85,20 +85,20 @@ int Database::dump() {
 
 Database::Database() {}
 
-Database::Database(long int _id) {
-    id = _id;
+Database::Database(unsigned long _id) {
+    id = id == DEFAULT_ID ? _id + 1 : _id;
     load();
 }
 
-bool Database::is(long int _unique) { return unique == _unique; }
+long Database::get() { return status; }
 
-void Database::set(long int _unique) {
-    unique = _unique;
+void Database::set(long _status) {
+    status = _status;
 
     dump();
 }
 
-void Database::add(long int hash) {
+void Database::add(long hash) {
     if (buffer_end == BUFFER_CAP) {
         buffer_end = 0;
     }
@@ -108,7 +108,7 @@ void Database::add(long int hash) {
     dump();
 }
 
-bool Database::has(long int hash) {
+bool Database::has(long hash) {
     for (int i = 0; i < BUFFER_CAP; i++) {
         if (buffer[i] == hash) {
             return true;
@@ -118,7 +118,7 @@ bool Database::has(long int hash) {
     return false;
 }
 
-void Database::remove(long int hash) {
+void Database::remove(long hash) {
     for (int pop = 0; pop < BUFFER_CAP; pop++) {
         if (buffer[pop] == hash) {
             if (pop == buffer_end - 1) {

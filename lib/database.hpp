@@ -1,11 +1,13 @@
 #include "config.hpp"
 
+#define DEFAULT_ID 5381
+
 class Database {
-    long int unique;
+    long status;
 
     int buffer_end;
 
-    long int buffer[BUFFER_CAP];
+    long buffer[BUFFER_CAP];
 
     void load();
 
@@ -16,19 +18,19 @@ class Database {
     char *path();
 
   public:
-    long int id;
+    unsigned long id;
 
     Database();
 
-    Database(long int id);
+    Database(unsigned long id);
 
-    bool is(long int unique);
+    long get();
 
-    void set(long int unique);
+    void set(long status);
 
-    void add(long int hash);
+    void add(long hash);
 
-    bool has(long int hash);
+    bool has(long hash);
 
-    void remove(long int hash);
+    void remove(long hash);
 };

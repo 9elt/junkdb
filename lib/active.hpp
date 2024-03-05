@@ -8,5 +8,5 @@ struct Active {
 
     Active();
 
-    Database *get(long int id);
+    Database *get(unsigned long id);
 };
