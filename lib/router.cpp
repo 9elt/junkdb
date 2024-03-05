@@ -16,8 +16,11 @@ char const *Router::handle(Request *request) {
 
     if (request->action == GET) {
         long res = db->get();
-        char *rstr = new char[res / 10 + 2];
-        sprintf(rstr, "%ld", res);
+        char *rstr = new char[res / 10 + 5];
+        rstr[0] = 'O';
+        rstr[1] = 'K';
+        rstr[2] = ' ';
+        sprintf(rstr + 2, "%ld", res);
         return rstr;
     }
 
