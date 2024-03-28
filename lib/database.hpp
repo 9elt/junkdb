@@ -1,4 +1,5 @@
 #include "config.hpp"
+#include <iostream>
 
 #define DEFAULT_ID 5381
 
@@ -31,6 +32,8 @@ class Database {
     void add(long hash);
 
     bool has(long hash);
+
+    void clear();
 
     void remove(long hash);
 };

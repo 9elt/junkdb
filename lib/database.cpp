@@ -149,3 +149,12 @@ void Database::remove(long hash) {
 
     dump();
 }
+
+void Database::clear() {
+    char *path = this->path();
+
+    printf("Deleting database %lu at %s\n", id, path);
+
+    std::remove(path);
+    delete[] path;
+}

@@ -67,6 +67,9 @@ Request::Request(char *str) {
     } else if (action_str[0] == 'R' && action_str[1] == 'E' &&
                action_str[2] == 'M') {
         action = REM;
+    } else if (action_str[0] == 'D' && action_str[1] == 'E' &&
+               action_str[2] == 'L') {
+        action = DEL;
     } else {
         printf("Unknown action: '%s'\n", action_str);
         action = UNKNOWN;

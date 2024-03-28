@@ -25,3 +25,5 @@ HAS,    check if the database contains the payload
 ADD,    add the payload to the database
 
 REM,    remove the payload from the database
+
+DEL,    delete the database
