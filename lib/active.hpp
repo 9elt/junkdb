@@ -9,4 +9,6 @@ struct Active {
     Active();
 
     Database *get(unsigned long id);
+
+    void clear(unsigned long id);
 };

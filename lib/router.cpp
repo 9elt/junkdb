@@ -36,7 +36,7 @@ char const *Router::handle(Request *request) {
         return OK;
     }
     case DEL: {
-        db->clear();
+        databases->clear(db->id);
         return OK;
     }
     case UNKNOWN: {

@@ -23,3 +23,15 @@ Database *Active::get(unsigned long id) {
 
     return &databases[size++];
 }
+
+void Active::clear(unsigned long id) {
+    for (int i = 0; i < size; i++) {
+        if (databases[i].id == id) {
+            databases[i].clear();
+            size--;
+            for (int j = i; j < size; j++) {
+                databases[j] = databases[j + 1];
+            }
+        }
+    }
+}
