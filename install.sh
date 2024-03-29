@@ -25,3 +25,5 @@ cp "$dir/client/bin" ~/.junkdb/junkdb-cli || fatal "Failed to copy junkdb client
 if ! [[ "$(cat ~/.bashrc)" == *junkdb* ]]; then
 	echo -e 'export PATH="$PATH:$HOME/.junkdb"' >>~/.bashrc || fatal "Failed to add junkdb to PATH"
 fi
+
+sed -i -e "s|$HOME|HOME|g" "$dir/lib/config.hpp" || fatal "Failed to set home directory"
