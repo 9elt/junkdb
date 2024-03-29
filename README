@@ -27,3 +27,20 @@ ADD,    add the payload to the database
 REM,    remove the payload from the database
 
 DEL,    delete the database
+
+
+client:
+
+usage: junkdb-cli <db-name> [options] <payload>
+       junkdb-cli <request> --raw [options]
+
+  --strip,   -s    strip response status
+  --raw            execute raw request
+  --get,     -G    get the database status
+  --set,     -S    set the database status
+  --has,     -H    check if the database contains the payload
+  --add,     -A    add the payload to the database
+  --rem,     -R    remove the payload from the database
+  --del,     -D    delete the datbase
+  --help,    -h    show this help message
+  --version, -V    show junkdb-cli version
