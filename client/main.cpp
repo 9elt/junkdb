@@ -15,16 +15,16 @@ const char *VERSION = "0.1.0";
 const char *HELP =
     "usage: %s <db-name> [options] <payload>\n"
     "       %s <request> --raw [options]\n\n"
-    "  --strip,   -s    strip response status\n"
-    "  --raw            execute raw request\n"
-    "  --get,     -G    get the database status\n"
-    "  --set,     -S    set the database status\n"
-    "  --has,     -H    check if the database contains the payload\n"
-    "  --add,     -A    add the payload to the database\n"
-    "  --rem,     -R    remove the payload from the database\n"
-    "  --del,     -D    delete the datbase\n"
-    "  --help,    -h    show this help message\n"
-    "  --version, -V    show junkdb-cli version\n";
+    "--strip,   -s    strip response status\n"
+    "--raw            execute raw request\n"
+    "--get,     -G    get the database status\n"
+    "--set,     -S    set the database status\n"
+    "--has,     -H    check if the database contains the payload\n"
+    "--add,     -A    add the payload to the database\n"
+    "--remove,  -R    remove the payload from the database\n"
+    "--delete,  -D    delete the datbase\n"
+    "--help,    -h    show this help message\n"
+    "--version, -V    show junkdb-cli version\n";
 
 int main(int argc, char **argv) {
     char *program = argv[0];
@@ -61,10 +61,10 @@ int main(int argc, char **argv) {
         } else if (strcmp(argv[i], "--add") == 0 ||
                    strcmp(argv[i], "-A") == 0) {
             action = ADD;
-        } else if (strcmp(argv[i], "--rem") == 0 ||
+        } else if (strcmp(argv[i], "--remove") == 0 ||
                    strcmp(argv[i], "-R") == 0) {
             action = REM;
-        } else if (strcmp(argv[i], "--del") == 0 ||
+        } else if (strcmp(argv[i], "--delete") == 0 ||
                    strcmp(argv[i], "-D") == 0) {
             action = DEL;
         } else if (strcmp(argv[i], "--help") == 0 ||
