@@ -27,6 +27,8 @@ int main(int argc, char **argv) {
                    strcmp(argv[i], "-V") == 0) {
             LOG_LF("junkdb version %s", VERSION);
             return 0;
+        } else {
+            FAIL_LF("Unknown option '%s'", argv[i]);
         }
     }
 
