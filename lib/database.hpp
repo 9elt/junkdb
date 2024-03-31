@@ -1,4 +1,5 @@
 #include "config.hpp"
+#include "util.hpp"
 #include <iostream>
 
 #define DEFAULT_ID 5381

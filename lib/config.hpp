@@ -1,9 +1,11 @@
+/// Server port
 #define PORT 40165
 
+/// Directory where the databases are stored
 #define DATA_DIR "HOME/.junkdb/data"
 
-/// how many databases can be active at once
+/// Number of databases that can be active at the same time
 #define ACTIVE_DATABASES 4
 
-/// how many items can be stored in the database buffer
+/// Database generic data capacity
 #define BUFFER_CAP 1009

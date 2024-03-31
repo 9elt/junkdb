@@ -1,5 +1,4 @@
 #include "request.hpp"
-#include <cstdio>
 #include <iostream>
 
 Request::Request(char *str) {
@@ -71,7 +70,7 @@ Request::Request(char *str) {
                action_str[2] == 'L') {
         action = DEL;
     } else {
-        printf("Unknown action: '%s'\n", action_str);
+        ERROR_LF("Unknown action: '%s'", action_str);
         action = UNKNOWN;
     }
 

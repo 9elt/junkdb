@@ -7,7 +7,7 @@ void Database::load() {
     FILE *f = fopen(path, "r");
 
     if (f == nullptr) {
-        printf("Creating database %lu at %s\n", id, path);
+        LOG_LF("Creating %lu at %s", id, path);
 
         empty();
 
@@ -20,7 +20,7 @@ void Database::load() {
     }
 
     if (fread(this, sizeof(Database), 1, f) != 1) {
-        printf("Cannot read database %lu at %s\n", id, path);
+        ERROR_LF("Cannot read %lu at %s", id, path);
 
         delete[] path;
         id = DEFAULT_ID;
@@ -28,7 +28,7 @@ void Database::load() {
         return;
     }
 
-    printf("Loaded database %lu at %s, status %lu, size %d\n", id, path, status,
+    LOG_LF("Loaded %lu from %s, status %lu tail %d", id, path, status,
            buffer_end);
 
     delete[] path;
@@ -53,13 +53,13 @@ void Database::empty() {
 int Database::dump() {
     char *path = this->path();
 
-    printf("Dumping database %lu at %s, status %ld, size %d\n", id, path,
-           status, buffer_end);
+    LOG_LF("Dumping %lu at %s, status %ld tail %d", id, path, status,
+           buffer_end);
 
     FILE *f = fopen(path, "w");
 
     if (f == nullptr) {
-        printf("Dump failed, error opening file %s\n", path);
+        ERROR_LF("Dump failed, error opening file %s", path);
 
         delete[] path;
 
@@ -67,7 +67,7 @@ int Database::dump() {
     }
 
     if (fwrite(this, sizeof(Database), 1, f) != 1) {
-        printf("Dump failed, error writing to file %s\n", path);
+        ERROR_LF("Dump failed, error writing to file %s", path);
 
         fclose(f);
 
@@ -145,16 +145,15 @@ void Database::remove(long hash) {
         }
     }
 
-    printf("Removed (%ld)\n", hash);
-
     dump();
 }
 
 void Database::clear() {
     char *path = this->path();
 
-    printf("Deleting database %lu at %s\n", id, path);
+    LOG_LF("Deleting %lu at %s", id, path);
 
     std::remove(path);
+
     delete[] path;
 }

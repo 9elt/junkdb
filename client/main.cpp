@@ -13,8 +13,8 @@
 const char *VERSION = "0.1.0";
 
 const char *HELP =
-    "usage: %s <db-name> [options] <payload>\n"
-    "       %s <request> --raw [options]\n\n"
+    "usage: %s <database> [options] <payload> [options]\n"
+    "       %s <request> [options] --raw [options]\n\n"
     "--strip,   -s    strip response status\n"
     "--raw            execute raw request\n"
     "--get,     -G    get the database status\n"
@@ -30,8 +30,7 @@ int main(int argc, char **argv) {
     char *program = argv[0];
 
     if (argc < 2) {
-        fprintf(stderr, "No arguments provided, check %s --help\n", program);
-        return 1;
+        FAIL_LF("No arguments provided, check %s --help", program);
     }
 
     char *request;
@@ -69,54 +68,45 @@ int main(int argc, char **argv) {
             action = DEL;
         } else if (strcmp(argv[i], "--help") == 0 ||
                    strcmp(argv[i], "-h") == 0) {
-            printf(HELP, program, program);
+            LOG_F(HELP, program, program);
             return 0;
         } else if (strcmp(argv[i], "--version") == 0 ||
                    strcmp(argv[i], "-V") == 0) {
-            printf("junkdb-cli version %s\n", VERSION);
+            LOG_LF("junkdb-cli version %s", VERSION);
             return 0;
-        } else if (strcmp(argv[i], "-") == 0) {
-            fprintf(stderr, "Invalid argument '%s'\n", argv[i]);
-            return 1;
         } else {
             unmarked = argv[i];
             if (i == 1) {
                 dbname = argv[i];
             }
+            continue;
         }
     }
 
     if (exect_raw) {
         if (unmarked == nullptr) {
-            fprintf(stderr, "No request provided, check %s --help\n", program);
-            return 1;
+            FAIL_LF("No request provided, check %s --help", program);
         }
 
         request = unmarked;
     } else {
         if (action == UNKNOWN) {
-            fprintf(stderr, "No action provided, check %s --help\n", program);
-            return 1;
+            FAIL_LF("No action provided, check %s --help", program);
         }
 
         if (dbname == nullptr) {
-            fprintf(stderr, "No database name provided, check %s --help\n",
-                    program);
-            return 1;
+            FAIL_LF("No database name provided, check %s --help", program);
         }
 
         if ((action == SET || action == HAS || action == ADD ||
              action == REM) &&
             (unmarked == nullptr || unmarked == dbname)) {
-            fprintf(stderr, "No payload provided, check %s --help\n", program);
-            return 1;
+            FAIL_LF("No payload provided, check %s --help", program);
         }
 
-        int request_size = action == DEL || action == GET
+        request = new char[action == DEL || action == GET
                                ? strlen(dbname) + 5
-                               : strlen(unmarked) + strlen(dbname) + 5;
-
-        request = new char[request_size]{0};
+                               : strlen(unmarked) + strlen(dbname) + 5]{0};
 
         switch (action) {
         case GET:
@@ -145,8 +135,7 @@ int main(int argc, char **argv) {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (fd == -1) {
-        fprintf(stderr, "Cannot open socket\n");
-        return 1;
+        FAIL_L("Cannot open socket");
     }
 
     sockaddr_in serv_addr;
@@ -156,8 +145,7 @@ int main(int argc, char **argv) {
     serv_addr.sin_port = htons(PORT);
 
     if (connect(fd, (sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        fprintf(stderr, "Cannot connect to the server\n");
-        return 1;
+        FAIL_L("Cannot connect to the server");
     }
 
     send(fd, request, strlen(request), 0);
@@ -167,10 +155,10 @@ int main(int argc, char **argv) {
             int offset = buffer[0] == 'O' ? 3 : 4; // 'OK ' or 'ERR
 
             if (buffer[offset - 1] != '\0') {
-                printf("%s", buffer + offset);
+                LOG_F("%s", buffer + offset);
             }
         } else {
-            printf("%s\n", buffer);
+            LOG_LF("%s", buffer);
         }
         bzero(buffer, 3);
     }
