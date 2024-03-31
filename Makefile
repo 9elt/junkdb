@@ -1,6 +1,6 @@
 TOPTARGETS := all clean
 
-SUBDIRS := client server
+SUBDIRS := junkdb junkdb-cli
 
 $(TOPTARGETS): $(SUBDIRS)
 

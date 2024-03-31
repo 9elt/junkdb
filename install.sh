@@ -19,8 +19,8 @@ fi
 mkdir ~/.junkdb || fatal "Failed to create ~/.junkdb"
 mkdir ~/.junkdb/data || fatal "Failed to create ~/.junkdb/data"
 
-cp "$dir/server/bin" ~/.junkdb/junkdb || fatal "Failed to copy junkdb server"
-cp "$dir/client/bin" ~/.junkdb/junkdb-cli || fatal "Failed to copy junkdb client"
+cp "$dir/junkdb/bin" ~/.junkdb/junkdb || fatal "Failed to copy junkdb server"
+cp "$dir/junkdb-cli/bin" ~/.junkdb/junkdb-cli || fatal "Failed to copy junkdb client"
 
 if ! [[ "$(cat ~/.bashrc)" == *junkdb* ]]; then
 	echo -e 'export PATH="$PATH:$HOME/.junkdb"' >>~/.bashrc || fatal "Failed to add junkdb to PATH"
