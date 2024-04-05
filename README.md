@@ -51,23 +51,28 @@ my-databse SET 32
 ```
 junkdb-cli <database> [options] <payload> [options]
 junkdb-cli <request> [options] --raw [options]
-
---strip,   -s    strip response status
---raw            execute raw request
---get,     -G    get the database status
---set,     -S    set the database status
---has,     -H    check if the database contains the payload
---add,     -A    add the payload to the database
---remove,  -R    remove the payload from the database
---delete,  -D    delete the datbase
---help,    -h    show this help message
---version, -V    show junkdb-cli version
 ```
+#### Options
+
+| option    | short | description                                 |
+|-----------|-------|---------------------------------------------|
+| --strip   | -s    | strip response status                       |
+| --raw     |       | execute raw request                         |
+| --get     | -G    | get the database status                     |
+| --set     | -S    | set the database status                     |
+| --has     | -H    | check if the database contains the payload  |
+| --add     | -A    | add the payload to the database             |
+| --remove  | -R    | remove the payload from the database        |
+| --delete  | -D    | delete the datbase                          |
+| --help    | -h    | show this help message                      |
+| --version | -V    | show junkdb-cli version                     |
+
 
 #### Example
 
 ```
 $ junkdb-cli 'my-database' --set 32
+OK
 ```
 ```
 $ junkdb-cli 'my-database' --get
@@ -93,4 +98,7 @@ OK
 $ junkdb-cli 'my-database' --delete
 OK
 ```
-
+```
+$ junkdb-cli 'my-database SET 32' --raw 
+OK
+```
