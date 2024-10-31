@@ -2,7 +2,7 @@
 
 A trivial database to store script states
 
-When using  the default [*configuration*](./lib/config.hpp), a junk database has a ***8KB* fixed size**, storing a **single numeric status** and *1009* **hashes of generic data**.
+When using  the default [*configuration*](./src/config.h), a junk database has a ***8KB* fixed size**, storing a **single numeric status** and *1009* **hashes of generic data**.
 
 The latter cannot be read back, but only added, removed or checked for existence. **Older entries are overwritten** when the database limit is exceeded. Databases are **automatically created** on first access.
 
