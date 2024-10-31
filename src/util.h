@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+#define IS_ARG(full, short)                                                    \
+    (strcmp(argv[i], full) == 0 || strcmp(argv[i], short) == 0)
+
 #define FAIL(msg)                                                              \
     {                                                                          \
         fprintf(stderr, msg);                                                  \

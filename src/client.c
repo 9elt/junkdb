@@ -1,7 +1,7 @@
 #include "actions.h"
 #include "config.h"
-#include "log.h"
 #include "types.h"
+#include "util.h"
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -47,29 +47,26 @@ int main(int argc, char **argv) {
     bool strip_response_status = false;
 
     for (int i = 1; i < argc; i++) {
-#define ARG(full, short)                                                       \
-    (strcmp(argv[i], full) == 0 || strcmp(argv[i], short) == 0)
-
-        if (ARG("--strip", "-s")) {
+        if (IS_ARG("--strip", "-s")) {
             strip_response_status = true;
-        } else if (ARG("--raw", "-r")) {
+        } else if (IS_ARG("--raw", "-r")) {
             exect_raw = true;
-        } else if (ARG("--get", "-G")) {
+        } else if (IS_ARG("--get", "-G")) {
             action = GET;
-        } else if (ARG("--set", "-S")) {
+        } else if (IS_ARG("--set", "-S")) {
             action = SET;
-        } else if (ARG("--has", "-H")) {
+        } else if (IS_ARG("--has", "-H")) {
             action = HAS;
-        } else if (ARG("--add", "-A")) {
+        } else if (IS_ARG("--add", "-A")) {
             action = ADD;
-        } else if (ARG("--remove", "-R")) {
+        } else if (IS_ARG("--remove", "-R")) {
             action = REM;
-        } else if (ARG("--delete", "-D")) {
+        } else if (IS_ARG("--delete", "-D")) {
             action = DEL;
-        } else if (ARG("--help", "-h")) {
+        } else if (IS_ARG("--help", "-h")) {
             LOG_F(HELP, program, program);
             return 0;
-        } else if (ARG("--version", "-V")) {
+        } else if (IS_ARG("--version", "-V")) {
             LOG_LF("junkdb-cli version %s", VERSION);
             return 0;
         } else {

@@ -1,7 +1,7 @@
 #include "actions.h"
 #include "config.h"
-#include "log.h"
 #include "types.h"
+#include "util.h"
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -353,11 +353,10 @@ int main(int argc, char **argv) {
     const char *program = argv[0];
 
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0) {
+        if (IS_ARG("--help", "-h")) {
             LOG_F(HELP, program);
             return 0;
-        } else if (strcmp(argv[i], "--version") == 0 ||
-                   strcmp(argv[i], "-V") == 0) {
+        } else if (IS_ARG("--version", "-V")) {
             LOG_LF("junkdb version %s", VERSION);
             return 0;
         } else {
