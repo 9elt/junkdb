@@ -262,30 +262,30 @@ Request request_parse(char *buffer) {
 
     body[section_cursor] = '\0';
 
+#define IS_ACTION(a)                                                           \
+    action_name[0] == a[0] && action_name[1] == a[1] && action_name[2] == a[2]
+
     request.database_id = hash(database_name);
 
-#define IS_ACTION(c1, c2, c3)                                                  \
-    action_name[0] == c1 &&action_name[1] == c2 &&action_name[2] == c3
-
-    if (IS_ACTION('G', 'E', 'T')) {
+    if (IS_ACTION("GET")) {
         request.action = GET;
-    } else if (IS_ACTION('S', 'E', 'T')) {
+    } else if (IS_ACTION("SET")) {
         request.action = SET;
-    } else if (IS_ACTION('H', 'A', 'S')) {
+        request.payload = atol(body);
+    } else if (IS_ACTION("HAS")) {
         request.action = HAS;
-    } else if (IS_ACTION('A', 'D', 'D')) {
+        request.payload = hash(body);
+    } else if (IS_ACTION("ADD")) {
         request.action = ADD;
-    } else if (IS_ACTION('R', 'E', 'M')) {
+        request.payload = hash(body);
+    } else if (IS_ACTION("REM")) {
         request.action = REM;
-    } else if (IS_ACTION('D', 'E', 'L')) {
+        request.payload = hash(body);
+    } else if (IS_ACTION("DEL")) {
         request.action = DEL;
     } else {
         request.action = UNKNOWN;
     }
-
-    request.payload = request.action == GET   ? 0
-                      : request.action == SET ? atol(body)
-                                              : hash(body);
 
     return request;
 }
