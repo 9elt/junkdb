@@ -1,10 +1,10 @@
-TOPTARGETS := all clean
+CC=gcc
+OPT=-O0
+CFLAGS=-Wall -Wextra -g $(OPT)
 
-SUBDIRS := junkdb junkdb-cli
+all:
+	$(CC) $(CFLAGS) src/server.c -o junkdb
+	$(CC) $(CFLAGS) src/client.c -o junkdb-cli
 
-$(TOPTARGETS): $(SUBDIRS)
-
-$(SUBDIRS):
-	$(MAKE) -C $@ $(MAKECMDGOALS)
-
-.PHONY: $(TOPTARGETS) $(SUBDIRS)
+clean:
+	rm  junkdb junkdb-cli

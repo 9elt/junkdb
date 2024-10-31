@@ -1,3 +1,2 @@
--I./lib
 -Wall
 -Wextra

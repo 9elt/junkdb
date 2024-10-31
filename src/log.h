@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #define FAIL(msg)                                                              \
     {                                                                          \
         fprintf(stderr, msg);                                                  \
@@ -33,5 +35,3 @@
     { fprintf(stdout, msg, __VA_ARGS__); }
 
 #define LOG_LF(msg, ...) LOG_F(msg "\n", __VA_ARGS__)
-
-unsigned long hash(char *str);

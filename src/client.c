@@ -1,10 +1,13 @@
-#include "config.hpp"
-#include "router.hpp"
+#include "actions.h"
+#include "config.h"
+#include "log.h"
+#include "types.h"
 #include <arpa/inet.h>
-#include <cstring>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <strings.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -35,8 +38,8 @@ int main(int argc, char **argv) {
 
     char *request;
 
-    char *dbname = nullptr;
-    char *unmarked = nullptr;
+    char *dbname = NULL;
+    char *unmarked = NULL;
 
     int action = UNKNOWN;
 
@@ -44,34 +47,29 @@ int main(int argc, char **argv) {
     bool strip_response_status = false;
 
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--strip") == 0 || strcmp(argv[i], "-s") == 0) {
+#define ARG(full, short)                                                       \
+    (strcmp(argv[i], full) == 0 || strcmp(argv[i], short) == 0)
+
+        if (ARG("--strip", "-s")) {
             strip_response_status = true;
-        } else if (strcmp(argv[i], "--raw") == 0) {
+        } else if (ARG("--raw", "-r")) {
             exect_raw = true;
-        } else if (strcmp(argv[i], "--get") == 0 ||
-                   strcmp(argv[i], "-G") == 0) {
+        } else if (ARG("--get", "-G")) {
             action = GET;
-        } else if (strcmp(argv[i], "--set") == 0 ||
-                   strcmp(argv[i], "-S") == 0) {
+        } else if (ARG("--set", "-S")) {
             action = SET;
-        } else if (strcmp(argv[i], "--has") == 0 ||
-                   strcmp(argv[i], "-H") == 0) {
+        } else if (ARG("--has", "-H")) {
             action = HAS;
-        } else if (strcmp(argv[i], "--add") == 0 ||
-                   strcmp(argv[i], "-A") == 0) {
+        } else if (ARG("--add", "-A")) {
             action = ADD;
-        } else if (strcmp(argv[i], "--remove") == 0 ||
-                   strcmp(argv[i], "-R") == 0) {
+        } else if (ARG("--remove", "-R")) {
             action = REM;
-        } else if (strcmp(argv[i], "--delete") == 0 ||
-                   strcmp(argv[i], "-D") == 0) {
+        } else if (ARG("--delete", "-D")) {
             action = DEL;
-        } else if (strcmp(argv[i], "--help") == 0 ||
-                   strcmp(argv[i], "-h") == 0) {
+        } else if (ARG("--help", "-h")) {
             LOG_F(HELP, program, program);
             return 0;
-        } else if (strcmp(argv[i], "--version") == 0 ||
-                   strcmp(argv[i], "-V") == 0) {
+        } else if (ARG("--version", "-V")) {
             LOG_LF("junkdb-cli version %s", VERSION);
             return 0;
         } else {
@@ -84,7 +82,7 @@ int main(int argc, char **argv) {
     }
 
     if (exect_raw) {
-        if (unmarked == nullptr) {
+        if (unmarked == NULL) {
             FAIL_LF("No request provided, check %s --help", program);
         }
 
@@ -94,19 +92,20 @@ int main(int argc, char **argv) {
             FAIL_LF("No action provided, check %s --help", program);
         }
 
-        if (dbname == nullptr) {
+        if (dbname == NULL) {
             FAIL_LF("No database name provided, check %s --help", program);
         }
 
         if ((action == SET || action == HAS || action == ADD ||
              action == REM) &&
-            (unmarked == nullptr || unmarked == dbname)) {
+            (unmarked == NULL || unmarked == dbname)) {
             FAIL_LF("No payload provided, check %s --help", program);
         }
 
-        request = new char[action == DEL || action == GET
-                               ? strlen(dbname) + 5
-                               : strlen(unmarked) + strlen(dbname) + 5]{0};
+        request = (char *)malloc((action == DEL || action == GET
+                                      ? strlen(dbname) + 5
+                                      : strlen(unmarked) + strlen(dbname) + 5) *
+                                 sizeof(char));
 
         switch (action) {
         case GET:
@@ -130,7 +129,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    char buffer[128]{0};
+    char buffer[128] = {0};
 
     int fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -138,13 +137,13 @@ int main(int argc, char **argv) {
         FAIL_L("Cannot open socket");
     }
 
-    sockaddr_in serv_addr;
+    struct sockaddr_in serv_addr;
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     serv_addr.sin_port = htons(PORT);
 
-    if (connect(fd, (sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+    if (connect(fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         FAIL_L("Cannot connect to the server");
     }
 
@@ -152,7 +151,8 @@ int main(int argc, char **argv) {
 
     while (recv(fd, buffer, sizeof(buffer), 0) > 0) {
         if (strip_response_status) {
-            int offset = buffer[0] == 'O' ? 3 : 4; // 'OK ' or 'ERR
+            // NOTE: 'OK ' or 'ERR
+            int offset = buffer[0] == 'O' ? 3 : 4;
 
             if (buffer[offset - 1] != '\0') {
                 LOG_F("%s", buffer + offset);

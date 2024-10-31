@@ -1,4 +1,3 @@
 data
-bin
-*.d
-*.o
+junkdb
+junkdb-cli
