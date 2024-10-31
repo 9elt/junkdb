@@ -298,51 +298,49 @@ Request request_parse(char *buffer) {
 #define UNREACHABLE_DATABASE "ERR unreachable database"
 #define SERVER_ERROR "ERR server error"
 
-char *request_handle(Pool *pool, Request *request) {
+void request_handle(Pool *pool, Request *request, char *response) {
     Database *database = pool_get(pool, request->database_id);
 
+#define SEND(...)                                                              \
+    sprintf(response, __VA_ARGS__);                                            \
+    return;
+
     if (database == NULL) {
-        return UNREACHABLE_DATABASE;
+        SEND(UNREACHABLE_DATABASE);
     }
 
     switch (request->action) {
     case GET: {
-        long res = database->status;
-
-        char *response = (char *)malloc((res / 10 + 5) * sizeof(char));
-
-        response[0] = 'O';
-        response[1] = 'K';
-        response[2] = ' ';
-
-        sprintf(response + 3, "%ld", res);
-
-        return response;
+        SEND(OK " %ld", database->status);
     }
     case SET: {
         database_set(database, request->payload);
-        return OK;
+
+        SEND(OK);
     }
     case HAS: {
-        return database_has(database, request->payload) ? TRUE : FALSE;
+        SEND(database_has(database, request->payload) ? TRUE : FALSE);
     }
     case ADD: {
         database_add(database, request->payload);
-        return OK;
+
+        SEND(OK);
     }
     case REM: {
         database_remove(database, request->payload);
-        return OK;
+
+        SEND(OK);
     }
     case DEL: {
         pool_delete(pool, request->database_id);
-        return OK;
+
+        SEND(OK);
     }
     case UNKNOWN: {
-        return UNKNOWN_ACTION;
+        SEND(UNKNOWN_ACTION);
     }
     default: {
-        return SERVER_ERROR;
+        SEND(SERVER_ERROR);
     }
     }
 }
@@ -377,7 +375,8 @@ int main(int argc, char **argv) {
     int sfd;
     int opt = 1;
 
-    char buffer[4096];
+    char request_buffer[4096];
+    char response_buffer[256];
 
     struct sockaddr_in serv_addr;
     struct sockaddr_in cli_addr;
@@ -426,23 +425,23 @@ int main(int argc, char **argv) {
             continue;
         }
 
-        bzero(buffer, 4096);
+        bzero(request_buffer, 4096);
+        bzero(response_buffer, 256);
 
-        if (read(sfd, buffer, 4095) < 0) {
+        if (read(sfd, request_buffer, 4095) < 0) {
             ERROR_L("Failed to read request");
             close(sfd);
             continue;
         }
 
-        LOG_LF("(request) %s", buffer);
+        LOG_LF("(request) %s", request_buffer);
 
-        Request request = request_parse(buffer);
+        Request request = request_parse(request_buffer);
 
-        char *response = request_handle(&pool, &request);
+        request_handle(&pool, &request, response_buffer);
 
-        send(sfd, response, strlen(response), 0);
+        send(sfd, response_buffer, strlen(response_buffer), 0);
 
-        free(response);
         close(sfd);
     }
 
