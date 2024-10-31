@@ -296,7 +296,6 @@ Request request_parse(char *buffer) {
 
 #define UNKNOWN_ACTION "ERR unknown action"
 #define UNREACHABLE_DATABASE "ERR unreachable database"
-#define SERVER_ERROR "ERR server error"
 
 void request_handle(Pool *pool, Request *request, char *response) {
     Database *database = pool_get(pool, request->database_id);
@@ -336,11 +335,8 @@ void request_handle(Pool *pool, Request *request, char *response) {
 
         SEND(OK);
     }
-    case UNKNOWN: {
-        SEND(UNKNOWN_ACTION);
-    }
     default: {
-        SEND(SERVER_ERROR);
+        SEND(UNKNOWN_ACTION);
     }
     }
 }
