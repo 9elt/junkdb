@@ -113,11 +113,11 @@ void database_set(Database *database, long status) {
 bool database_has(Database *database, long hash) {
     for (int i = 0; i < BUFFER_CAP; i++) {
         if (database->buffer[i] == hash) {
-            return false;
+            return true;
         }
     }
 
-    return true;
+    return false;
 }
 
 void database_add(Database *database, long hash) {
