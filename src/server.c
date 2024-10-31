@@ -57,17 +57,20 @@ int database_dump(Database *database) {
 
     if (f == NULL) {
         free(path);
+
         return -1;
     }
 
     if (fwrite(database, sizeof(Database), 1, f) != 1) {
         fclose(f);
         free(path);
+
         return -1;
     }
 
     fclose(f);
     free(path);
+
     return 0;
 }
 
@@ -83,19 +86,16 @@ Database database_load(unsigned long id) {
         database_empty(&database);
 
         if (database_dump(&database) < 0) {
-            free(path);
             database.id = DEFAULT_ID;
-        };
+        }
+
+        free(path);
 
         return database;
     }
 
     if (fread(&database, sizeof(Database), 1, f) != 1) {
-        fclose(f);
-        free(path);
         database.id = DEFAULT_ID;
-
-        return database;
     }
 
     fclose(f);
